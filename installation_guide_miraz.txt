@@ -1,0 +1,10 @@
+
+
+#solved errors: 
+follow tutorial
+restart xampp
+### steps: 
+	$ php artisan migrate
+	$ php artisan key:generate
+	$ php artisan serve
+
