@@ -22,8 +22,9 @@ class NoteController extends Controller
         // $notes = Note::where("user_id", auth()->id())->get();
         //OR
 
+        $title = "All Notes";
         $notes = Note::whereUserId(auth()->id())->latest()->paginate(5);
-        return view("notes.index", compact('notes'));
+        return view("notes.index", compact(['notes', 'title']));
     }
 
     /**
@@ -57,7 +58,9 @@ class NoteController extends Controller
      */
     public function show(Note $note)
     {
-        //
+        // dd($note);
+        $title = 'Show Note';
+        return view('notes.show', compact(['note', 'title']));
     }
 
     /**
@@ -65,7 +68,8 @@ class NoteController extends Controller
      */
     public function edit(Note $note)
     {
-        //
+        $title = 'Edit Note';
+        return view('notes.edit', compact(['note','title']));
     }
 
     /**
