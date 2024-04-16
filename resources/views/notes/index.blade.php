@@ -5,9 +5,35 @@
         </h2>
     </x-slot>
 
-    <div class="max-w-2xl mx-auto sm:px-6 lg:px-8 p-4">
+    <div class="max-w-3xl mx-auto sm:px-6 lg:px-8 p-4">
+        <div class="flex justify-between items-center">
+            <div class="float-left">
+                <h2 class="text-4xl font-extrabold text-gray-900 dark:text-gray-100">
+                    {{ __('Notes') }}
+                </h2>
+            </div>
+            <div>
+                {{-- <a href="{{ route('notes.create') }}"
+                    class="float-right inline-flex items-center px-4 py-2 bg-green-500 dark:bg-green-500/100 border border-transparent rounded-md font-semibold text-xs ■text-white dark:text-gray-800 uppercase tracking-widest hover:bg-green-700 dark:hover:bg-green-400 focus:bg-green-700 dark:focus:bg-green active:bg-green-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                    Create
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
 
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mt-6 space-y-6">
+                </a> --}}
+                <x-green-btn-link :href="route('notes.create')">
+                    Create
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                </x-green-btn-link>
+
+            </div>
+        </div>
+
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mt-6 space-y-6 mb-2">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 ">
                 <tr>
                     <th scope="col" class="px-6 py-3">
@@ -38,7 +64,7 @@
                             {{ $note->title }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ $note->body }}
+                            {{ Str::limit($note->body, 30) }}
                         </td>
                         <td class="px-6 py-4">
                             {{ $note->created_at->diffForHumans() }}
@@ -68,6 +94,7 @@
 
             </tbody>
         </table>
+        {{ $notes->links() }}
     </div>
     </div>
 </x-app-layout>

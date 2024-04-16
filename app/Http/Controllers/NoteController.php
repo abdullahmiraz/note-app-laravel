@@ -16,7 +16,13 @@ class NoteController extends Controller
         // dd(auth()->id());
         // retrieve all notes from the DB
         // $notes = Note::all();
-        $notes = Note::where("user_id", auth()->id())->get();
+        // $notes = Note::where("user_id", auth()->id())->get();
+
+        // fetch only the notes created by the looged in user
+        // $notes = Note::where("user_id", auth()->id())->get();
+        //OR
+
+        $notes = Note::whereUserId(auth()->id())->latest()->paginate(5);
         return view("notes.index", compact('notes'));
     }
 
@@ -25,7 +31,8 @@ class NoteController extends Controller
      */
     public function create()
     {
-        return view("notes.create");
+        $title = "Create Note";
+        return view("notes.create", compact("title"));
 
     }
 
