@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Note;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class NoteController extends Controller
@@ -12,7 +13,9 @@ class NoteController extends Controller
      */
     public function index()
     {
-        //
+        // retrieve all notes from the DB
+        $notes = Note::all();
+        return view("notes.index");
     }
 
     /**
@@ -20,15 +23,24 @@ class NoteController extends Controller
      */
     public function create()
     {
-        //
+        return view("notes.create");
+
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        //
+        // validattion
+        $validated = $request->validate([
+            "title" => "required|string|min:5|max:255|unique:notes",
+            "body" => "required|string|min:10",
+        ]);
+
+        //creating thee note
+        $request->user()->notes()->create($validated);
+        dd('created');
     }
 
     /**
