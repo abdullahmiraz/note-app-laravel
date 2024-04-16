@@ -13,9 +13,11 @@ class NoteController extends Controller
      */
     public function index()
     {
+        // dd(auth()->id());
         // retrieve all notes from the DB
-        $notes = Note::all();
-        return view("notes.index");
+        // $notes = Note::all();
+        $notes = Note::where("user_id", auth()->id())->get();
+        return view("notes.index", compact('notes'));
     }
 
     /**
