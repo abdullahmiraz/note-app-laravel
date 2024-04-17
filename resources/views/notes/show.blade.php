@@ -23,10 +23,18 @@
                     {{ $note->body }}
                 </p>
             </div>
-            <div class="flex justify-end p-4 bg-gray-100 dark:bg-gray-700">
-                <x-cyan-btn-link class="mr-2">Edit</x-cyan-btn-link>
-                <x-red-btn-link class="mr-2">Delete</x-red-btn-link>
-            </div>
+            @if ($note->user->is(auth()->user()))
+                <div class="flex justify-end p-4 bg-gray-100 dark:bg-gray-700">
+                    <x-cyan-btn-link class="mr-2" :href="route('notes.edit', $note)">Edit</x-cyan-btn-link>
+
+                    <form method="POST" action="{{ route('notes.destroy', $note) }}">
+                        @csrf
+                        @method('delete')
+                        <x-danger-button onclick="return confirm('Are you sure, to delete?')">
+                            Delete</x-danger-button>
+                    </form>
+                </div>
+            @endif
         </div>
     </div>
 </x-app-layout>

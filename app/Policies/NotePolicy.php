@@ -21,7 +21,8 @@ class NotePolicy
      */
     public function view(User $user, Note $note): bool
     {
-        //
+        return $note->user()->is($user);
+
     }
 
     /**
@@ -45,7 +46,7 @@ class NotePolicy
      */
     public function delete(User $user, Note $note): bool
     {
-        //
+        return $this->update($user, $note);
     }
 
     /**

@@ -46,7 +46,8 @@ class NoteController extends Controller
         $request->user()->notes()->create($validated);
 
         // Redirect to index or show page after creating
-        return redirect()->route('notes.index');
+        return redirect()->route('notes.index')->with('success', "note created successfully");
+
     }
 
     /**
@@ -54,6 +55,7 @@ class NoteController extends Controller
      */
     public function show(Note $note)
     {
+        $this->authorize('view', $note);
         $title = 'Show Note';
         return view('notes.show', compact('note', 'title'));
     }
@@ -94,7 +96,7 @@ class NoteController extends Controller
         $note->update($validated);
 
         // Redirect to index or show page after updating
-        return redirect()->route('notes.index');
+        return redirect()->route('notes.index')->with('success', "note updated successfully");
     }
 
     /**
@@ -105,10 +107,10 @@ class NoteController extends Controller
         // Authorize the delete action
         $this->authorize('delete', $note);
 
-        // Perform deletion logic (e.g., $note->delete())
-
+        // Perform deletion logic (e.g., )
+        $note->delete();
         // Redirect to index page after deletion
-        return redirect()->route('notes.index');
+        return redirect()->route('notes.index')->with('success', "note deleted successfully");
     }
 }
 
