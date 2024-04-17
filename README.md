@@ -59,9 +59,44 @@ In order to ensure that the Laravel community is welcoming to all, please review
 
 ## Security Vulnerabilities
 
+
+
 If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 # note-app-laravel
+
+# Sorting task: 
+### This is a  a very basic php code that checks if the number is less than a number which is found in the array. As the array is already sorted , so it will just check if there are no larger number that than, that position it will be situated ;
+```
+
+    <?php 
+    function  readInput($promt) 
+    { 
+    echo  $promt  .  ": "; 
+    return  trim(fgets(STDIN)); 
+    } 
+    $arraysz = (int) readInput("Enter the arrray length: "); 
+    $numbers = array(); 
+    for ($i = 0; $i < $arraysz; $i++) { 
+    $number = readInput(("Enter number: "  . ($i + 1) .  " ")); 
+    $numbers[] = (int) $number; 
+    }  
+    sort($numbers);      
+    $target = (int) readInput("Enterthe target Number");  
+    echo  "Numbers: "; 
+    foreach ($numbers as $numb) { 
+    echo  $numb  .  " "; 
+    } 
+    $index = 0; 
+    foreach ($numbers as $numb) { 
+    if ($numb < $target) { 
+    $index++; 
+    } else 
+    break; 
+    } 
+    echo  "\nTarget should be in here: $index  \n";
+
+```
