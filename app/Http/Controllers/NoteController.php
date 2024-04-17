@@ -5,26 +5,21 @@ namespace App\Http\Controllers;
 use App\Models\Note;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests; // Import AuthorizesRequests trait
 
 class NoteController extends Controller
 {
+    use AuthorizesRequests;
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        // dd(auth()->id());
-        // retrieve all notes from the DB
-        // $notes = Note::all();
-        // $notes = Note::where("user_id", auth()->id())->get();
-
-        // fetch only the notes created by the looged in user
-        // $notes = Note::where("user_id", auth()->id())->get();
-        //OR
-
         $title = "All Notes";
         $notes = Note::whereUserId(auth()->id())->latest()->paginate(5);
-        return view("notes.index", compact(['notes', 'title']));
+        return view("notes.index", compact('notes', 'title'));
     }
 
     /**
@@ -34,7 +29,6 @@ class NoteController extends Controller
     {
         $title = "Create Note";
         return view("notes.create", compact("title"));
-
     }
 
     /**
@@ -42,15 +36,17 @@ class NoteController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        // validattion
+        // Validation
         $validated = $request->validate([
             "title" => "required|string|min:5|max:255|unique:notes",
             "body" => "required|string|min:10",
         ]);
 
-        //creating thee note
+        // Create the note
         $request->user()->notes()->create($validated);
-        dd('created');
+
+        // Redirect to index or show page after creating
+        return redirect()->route('notes.index');
     }
 
     /**
@@ -58,9 +54,8 @@ class NoteController extends Controller
      */
     public function show(Note $note)
     {
-        // dd($note);
         $title = 'Show Note';
-        return view('notes.show', compact(['note', 'title']));
+        return view('notes.show', compact('note', 'title'));
     }
 
     /**
@@ -68,8 +63,11 @@ class NoteController extends Controller
      */
     public function edit(Note $note)
     {
+        // Authorize the update action
+        $this->authorize('update', $note);
+
         $title = 'Edit Note';
-        return view('notes.edit', compact(['note','title']));
+        return view('notes.edit', compact('note', 'title'));
     }
 
     /**
@@ -77,7 +75,26 @@ class NoteController extends Controller
      */
     public function update(Request $request, Note $note)
     {
-        //
+        // Authorize the update action
+        $this->authorize('update', $note);
+
+        // Validation
+        $validated = $request->validate([
+            "title" => [
+                'required',
+                'string',
+                'min:5',
+                'max:255',
+                Rule::unique('notes')->ignore($note->id)
+            ],
+            'body' => 'required|string|min:10',
+        ]);
+
+        // Update the note
+        $note->update($validated);
+
+        // Redirect to index or show page after updating
+        return redirect()->route('notes.index');
     }
 
     /**
@@ -85,6 +102,13 @@ class NoteController extends Controller
      */
     public function destroy(Note $note)
     {
-        //
+        // Authorize the delete action
+        $this->authorize('delete', $note);
+
+        // Perform deletion logic (e.g., $note->delete())
+
+        // Redirect to index page after deletion
+        return redirect()->route('notes.index');
     }
 }
+
